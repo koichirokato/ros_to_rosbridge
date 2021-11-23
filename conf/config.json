@@ -1,0 +1,11 @@
+{
+    "exclude_topics":[
+        "/rosout",
+        "/rosout_agg",
+        "/client_count",
+        "/connected_clients"
+    ],
+    "include_topics":[
+        {"name" : "/cmd_vel", "type" : "geometry_msgs/Twist"}
+    ]
+}
