@@ -1,0 +1,14 @@
+<launch>
+    <arg name="local_host" default="127.0.0.1" />
+    <arg name="local_port" default="9090" />
+    <arg name="remote_host" default="127.0.0.1" />
+    <arg name="remote_port" default="9090" />
+
+    <node name="ros_to_rosbridge" pkg="ros_to_rosbridge" type="rosbridge_to_rosbridge.py">
+        <param name="local_host" value="$(arg local_host)" />
+        <param name="remote_host" value="$(arg remote_host)" />
+        <param name="local_port" value="$(arg local_port)" />
+        <param name="remote_port" value="$(arg remote_port)" />
+    </node>
+
+</launch>
