@@ -6,7 +6,6 @@ from roslibpy import Ros, Topic
 import rospkg
 
 import time
-import json
 import yaml
 import re
 from functools import partial
