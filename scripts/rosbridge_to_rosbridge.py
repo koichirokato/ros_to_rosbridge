@@ -46,6 +46,7 @@ class rosbridge_to_rosbridge():
             callback = partial(self.callback, self.bridge_pub[topicname])
             self.local_sub[topicname].subscribe(callback)
 
+
         if conf['include_topics']==None:
             # if match exclude topic => flag is True
             flag = False
@@ -55,6 +56,7 @@ class rosbridge_to_rosbridge():
                     if flag:
                         break
                 if not flag:
+                    
                     set_pub_sub(topic_dict['name'], topic_dict['type'])
         else:
             for topic_conf in conf['include_topics']:
@@ -65,8 +67,10 @@ class rosbridge_to_rosbridge():
 
     # Subscribe ROS bridge and publish ROS message by ROS bridge
     def callback(self, pub, message):
+        rospy.loginfo(message)
         # ROS callback
-        if self.ros_client.is_connected:
+        if self.bridge_ros_client.is_connected:
+            rospy.loginfo(message)
             pub.publish(message)
         else:
             rospy.loginfo('Disconnected')
