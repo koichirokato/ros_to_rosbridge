@@ -67,10 +67,8 @@ class rosbridge_to_rosbridge():
 
     # Subscribe ROS bridge and publish ROS message by ROS bridge
     def callback(self, pub, message):
-        rospy.loginfo(message)
         # ROS callback
         if self.bridge_ros_client.is_connected:
-            rospy.loginfo(message)
             pub.publish(message)
         else:
             rospy.loginfo('Disconnected')
