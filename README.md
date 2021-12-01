@@ -1,6 +1,8 @@
 # ros_to_rosbridge
 This is the system with mutli roscore using ros bridge.  
 
+The details of this ros node is in [here(Japanese)](https://qiita.com/koichi_baseball/private/8d15a06d296c09908f5f) (Qiita Advent Calendar 2021).  
+
 If you use developed ros node, you can
  - communicate multiple machines with multiple ros master
    (also can do using WSL2)
