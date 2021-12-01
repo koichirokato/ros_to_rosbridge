@@ -63,7 +63,10 @@ class rosbridge_to_rosbridge():
                 set_pub_sub(topic_conf['name'].decode(), topic_conf['type'].decode())
 
         # self.ros_client.on_ready(self.start_thread, run_in_thread=True)
-        self.bridge_ros_client.run_forever()
+        try:
+            self.bridge_ros_client.run_forever()
+        except KeyboardInterrupt:
+            self.bridge_ros_client.close()
 
     # Subscribe ROS bridge and publish ROS message by ROS bridge
     def callback(self, pub, message):
