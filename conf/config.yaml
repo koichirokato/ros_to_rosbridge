@@ -1,0 +1,12 @@
+id : robot_a
+exclude_topics:
+  - /rosout
+  - /rosout_agg
+  - /client_count
+  - /connected_clients
+  # - /turtle1/*
+include_topics:
+  # - name : /cmd_vel 
+  #   type : geometry_msgs/Twist
+  # - name : /odom
+  #   type : nav_msgs/Odometry
