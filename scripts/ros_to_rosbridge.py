@@ -13,9 +13,9 @@ from geometry_msgs.msg import Twist
 import time
 import json
 
-class rosToRosbridge():
+class ros_to_rosbridge():
     def __init__(self):
-        # ros bridge
+        # ROS bridge setting
         self.bridge_pub = {}
         self.bridge_ros_client = Ros(rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
         self.topicname = '/cmd_vel'
@@ -28,21 +28,18 @@ class rosToRosbridge():
 
         # ROS sub
         self.cmdvel_sub = rospy.Subscriber(self.topicname, Twist, self.ros_callback, callback_args=self.topicname)
-        self.cmdvel_sub = rospy.Subscriber(self.topicname, Twist, self.ros_callback, callback_args=self.topicname)
 
         self.bridge_ros_client.run_forever()
 
     def ros_callback(self, message, topicname):
         dict_message = message_converter.convert_ros_message_to_dictionary(message)
-        rospy.loginfo(topicname)
-        rospy.loginfo(dict_message)
         self.bridge_pub[topicname].publish(Message(dict_message))
 
 if __name__ == '__main__':
     rospy.init_node('ros_to_rosbridge_demo')
 
     time.sleep(1)
-    node = rosToRosbridge()
+    node = ros_to_rosbridge()
 
     while not rospy.is_shutdown():
         try:
