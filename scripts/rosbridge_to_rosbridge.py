@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# import warnings
+# warnings.filterwarnings('ignore')
+
 import rospy
 from roslibpy import Ros, Topic
 import rospkg
@@ -16,7 +19,6 @@ class rosbridge_to_rosbridge():
         self.local_sub   = {}
         self.bridge_pub  = {}
         rospack          = rospkg.RosPack()
-        # conf            = json.load(open(rospack.get_path('ros_to_rosbridge')+'/conf/config.json'))
         conf             = yaml.safe_load(open(rospack.get_path('ros_to_rosbridge')+'/conf/config.yaml'))
         topics           = rospy.get_published_topics('/')
         topics_list_dict = []
@@ -61,7 +63,6 @@ class rosbridge_to_rosbridge():
             for topic_conf in conf['include_topics']:
                 set_pub_sub(topic_conf['name'].decode(), topic_conf['type'].decode())
 
-        # self.ros_client.on_ready(self.start_thread, run_in_thread=True)
         try:
             self.bridge_ros_client.run_forever()
         except KeyboardInterrupt:
