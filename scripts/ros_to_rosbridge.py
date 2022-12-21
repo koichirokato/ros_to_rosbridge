@@ -17,7 +17,7 @@ class ros_to_rosbridge():
     def __init__(self):
         # ROS bridge setting
         self.bridge_pub = {}
-        self.bridge_ros_client = Ros(rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
+        self.bridge_ros_client = Ros(rospy.get_param('~host_to','127.0.0.1'), rospy.get_param('~port_to', 9090))
         self.topicname = '/cmd_vel'
         datatype = 'geometry_msgs/Twist'
         self.bridge_pub[self.topicname] = Topic(self.bridge_ros_client, self.topicname+'_web', datatype)

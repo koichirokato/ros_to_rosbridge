@@ -26,11 +26,11 @@ class rosbridge_to_rosbridge():
             topics_list_dict.append({'name':topic[0], 'type':topic[1]})
         use_id_for_ns   = bool(rospy.get_param('~use_id_for_ns', "False"))
 
-        self.local_ros_client  = Ros(rospy.get_param('~local_host','127.0.0.1'), rospy.get_param('~local_port', 9090))
-        self.bridge_ros_client = Ros(rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
+        self.local_ros_client  = Ros(rospy.get_param('~host_from','127.0.0.1'), rospy.get_param('~port_from', 9090))
+        self.bridge_ros_client = Ros(rospy.get_param('~host_to','127.0.0.1'), rospy.get_param('~port_to', 9090))
 
         rospy.loginfo('')
-        rospy.loginfo('Connect Local Host : [%s:%s], Remote Host : [%s:%s]', rospy.get_param('~local_host','127.0.0.1'), rospy.get_param('~local_port', 9090),rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
+        rospy.loginfo('Connect Local Host : [%s:%s], Remote Host : [%s:%s]', rospy.get_param('~host_from','127.0.0.1'), rospy.get_param('~port_from', 9090),rospy.get_param('~host_to','127.0.0.1'), rospy.get_param('~port_to', 9090))
         rospy.loginfo('')
 
         rospy.loginfo('Make below topics bridge')

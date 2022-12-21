@@ -1,15 +1,15 @@
 <launch>
-    <arg name="local_host" default="10.0.20.83" />
-    <arg name="local_port" default="9091" />
-    <arg name="remote_host" default="10.0.20.81" />
-    <arg name="remote_port" default="9090" />
+    <arg name="host_from" default="127.0.0.1" />
+    <arg name="port_from" default="9090" />
+    <arg name="host_to" default="127.0.0.1" />
+    <arg name="port_to" default="9090" />
     <arg name="use_id_for_ns" default="false" />
 
     <node name="rosbridge_to_rosbridge" pkg="rosbridge_bridge" type="rosbridge_to_rosbridge.py" output="screen">
-        <param name="local_host" value="$(arg local_host)" />
-        <param name="local_port" value="$(arg local_port)" />
-        <param name="remote_host" value="$(arg remote_host)" />
-        <param name="remote_port" value="$(arg remote_port)" />
+        <param name="host_from" value="$(arg host_from)" />
+        <param name="port_from" value="$(arg port_from)" />
+        <param name="host_to" value="$(arg host_to)" />
+        <param name="port_to" value="$(arg port_to)" />
         <param name="use_id_for_ns" value="$(arg use_id_for_ns)" />
     </node>
 

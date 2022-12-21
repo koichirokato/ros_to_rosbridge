@@ -22,10 +22,10 @@ class rosbridge_to_ros():
 
         self.use_id_for_ns = bool(rospy.get_param('~use_id_for_ns', "False"))
 
-        self.bridge_ros_client = Ros(rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
+        self.bridge_ros_client = Ros(rospy.get_param('~host_from','127.0.0.1'), rospy.get_param('~port_from', 9090))
 
         rospy.loginfo('')
-        rospy.loginfo('Remote Host : [%s:%s]', rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
+        rospy.loginfo('Remote Host : [%s:%s]', rospy.get_param('~host_from','127.0.0.1'), rospy.get_param('~port_from', 9090))
         rospy.loginfo('')
 
         rospy.loginfo('Make below topics bridge')
