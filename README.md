@@ -1,71 +1,65 @@
-# ros_to_rosbridge
-This is the system with mutli roscore using ros bridge.  
+# rosbridge_bridge
+This system can help connect mutliple roscores using rosbridge. Note that in most cases it is recommended to [use one roscore](http://wiki.ros.org/ROS/Tutorials/MultipleMachines) or a more advanced 
+multimaster system.
 
-The details of this ros node is in [here(Japanese)](https://qiita.com/koichi_baseball/private/8d15a06d296c09908f5f) (Qiita Advent Calendar 2021).  
+The details of this ros node is in [here (Japanese)](https://qiita.com/koichi_baseball/private/8d15a06d296c09908f5f) (Qiita ROS Advent Calendar 2021).  
 
-If you use developed ros node, you can
- - communicate multiple machines with multiple ros master
-   (also can do using WSL2)
- - publish any topics
- - distinguish topicname when you publish to another ros master
-   (it is possible to leave it unchanged)
-   example:
-    〇 /cmd_vel => /cmd_vel
-    〇 /cmd_vel => /robot_a/cmd_vel
+Features
+ - forward topics between multiple ros masters
+ - works with WSL2
+ - use include / exclude rules to specify topic names
+ - optionally add topic prefixes
+    * /cmd_vel => /cmd_vel
+    * /cmd_vel => /robot_a/cmd_vel
 
-![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/426354/f30ff6c2-dca7-da87-62f5-ed6ba5af58fc.png)
+![diagram.png](assets/diagram.png)
 
 # Dependencies
-[ROS bridge](http://wiki.ros.org/rosbridge_suite), [roslibpy](https://roslibpy.readthedocs.io/en/latest/), [rospy-message-converter](http://wiki.ros.org/rospy_message_converter)
+[ROS bridge](http://wiki.ros.org/rosbridge_suite), [rospy-message-converter](http://wiki.ros.org/rospy_message_converter), [roslibpy](https://roslibpy.readthedocs.io/en/latest/)
 
 ```shell
-$ sudo apt-get install ros-<rosdistro>-rosbridge-server
-$ pip install roslibpy
-$ sudo apt-get install ros-<rosdistro>-rospy-message-converter
+sudo apt-get install ros-<rosdistro>-rosbridge-server ros-<rosdistro>-rospy-message-converter
+pip install roslibpy
 ```
 
 # launch
-If you use 2 machines, you have to do both machines.
+This program only forwards in one direction. If you want to forward topics in both directions there must be an instance of this node on both sides. 
+It is important that the configurations are different because otherwise messages will be forwarded endlessly between the two nodes.
 
-## ROS bridge websocket server
+
+There are two modes: `rosbridge_to_rosbridge` forwards between two rosbridge servers and `rosbridge_to_ros` forwards from a rosbridge server to the local roscore.
+
+### ROS bridge websocket server
 ```shell
-$ roslaunch rosbridge_server rosbridge_websocket.launch
+roslaunch rosbridge_server rosbridge_websocket.launch
 ```
 
-## ROS to ROS Bridge (this node)
+### ROS to ROS Bridge (this node)
 ```shell
-$ roslaunch ros_to_rosbridge rosbridge_to_rosbridge.launch remote_host:={remote PC ip address}
+roslaunch rosbridge_bridge rosbridge_to_rosbridge.launch
 ```
 
-| param name | default | explanation |
-|:-:|:-:|:-:|
-| local_host | 127.0.0.1 | Local address using Websocket server |
-| local_port | 9090 |  Local port using Websocket server |
-| remote_host | 127.0.0.1 | Remote address using Websocket server |
-| remote_port | 9090 | Local port using Websocket server |
-| use_id_for_ns | false | Add id in config file to topicname (If true, /cmd_vel => /id/cmd_vel) |
+OR
+
+```shell
+roslaunch rosbridge_bridge rosbridge_to_ros.launch
+```
+
+
+| param name    | default          | description                                                     |
+| :-:           | :-:              | :-:                                                             |
+| host_from     | 127.0.0.1        | Address of Websocket server to subscribe on                     |
+| port_from     | 9090             | Port of Websocket server to subscribe on                        |
+| host_to       | 127.0.0.1        | Address of Websocket server to publish on                       |
+| port_to       | 9090             | Port of Websocket server to publish on                          |
+| use_id_for_ns | false            | Use id as topic name prefix? (If true, /cmd_vel => /id/cmd_vel) |
+| config_file   | conf/config.yaml | Location of forwarding rule configuration file                  |
 
 ## Config
-In `ros_to_rosbridge/conf`, there is `config.yaml`.  
-Default is below.  
+Use `rosbridge_bridge/conf/config.yaml` to set rules for including or excluding topics to forward. Adding any "include" rules will cause the "exclude" rules to be ignored.
 
-```text:ros_to_rosbridge/conf/config.yaml
-id : robot_a
-exclude_topics:
-  - /rosout
-  - /rosout_agg
-  - /client_count
-  - /connected_clients
-  # - /turtle1/*
-include_topics:
-  # - name : /cmd_vel 
-  #   type : geometry_msgs/Twist
-  # - name : /odom
-  #   type : nav_msgs/Odometry
-```
-
-| Item | Explanation |
-|:-:|:-:|
-| id | id for topicname when bridge |
-| exclude_topics | Topics for which bridges are excluded |
+| Item           | Explanation                                        |
+| :-:            | :-:                                                |
+| id             | id for topicname when bridge                       |
+| exclude_topics | Topics for which bridges are excluded              |
 | include_topics | The topic to be bridged (topic name and data type) |

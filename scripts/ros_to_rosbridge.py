@@ -24,7 +24,7 @@ class ros_to_rosbridge():
 
         # read config
         rospack = rospkg.RosPack()
-        conf = json.load(open(rospack.get_path('ros_to_rosbridge')+'/conf/config.json'))
+        conf = json.load(open(rospack.get_path('rosbridge_bridge')+'/conf/config.json'))
 
         # ROS sub
         self.cmdvel_sub = rospy.Subscriber(self.topicname, Twist, self.ros_callback, callback_args=self.topicname)

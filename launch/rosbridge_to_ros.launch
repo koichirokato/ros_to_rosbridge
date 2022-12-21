@@ -1,0 +1,14 @@
+<launch>
+    <arg name="remote_host" default="10.0.20.83" />
+    <arg name="remote_port" default="9091" />
+    <arg name="use_id_for_ns" default="false" />
+    <arg name="config_file" default="$(find rosbridge_bridge)/conf/config.yaml" />
+
+    <node name="rosbridge_to_ros" pkg="rosbridge_bridge" type="rosbridge_to_ros.py" output="screen">
+        <param name="remote_host" value="$(arg remote_host)" />
+        <param name="remote_port" value="$(arg remote_port)" />
+        <param name="use_id_for_ns" value="$(arg use_id_for_ns)" />
+        <param name="config_file" value="$(arg config_file)" />
+    </node>
+
+</launch>
