@@ -19,7 +19,7 @@ Features
 
 ```shell
 sudo apt-get install ros-<rosdistro>-rosbridge-server ros-<rosdistro>-rospy-message-converter
-pip install roslibpy
+pip3 install roslibpy
 ```
 
 # launch
