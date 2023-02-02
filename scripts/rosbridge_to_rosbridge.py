@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # import warnings
@@ -19,26 +19,26 @@ class rosbridge_to_rosbridge():
         self.local_sub   = {}
         self.bridge_pub  = {}
         rospack          = rospkg.RosPack()
-        conf             = yaml.safe_load(open(rospack.get_path('ros_to_rosbridge')+'/conf/config.yaml'))
+        conf             = yaml.safe_load(open(rospack.get_path('rosbridge_bridge')+'/conf/config.yaml'))
         topics           = rospy.get_published_topics('/')
         topics_list_dict = []
         for topic in topics:
             topics_list_dict.append({'name':topic[0], 'type':topic[1]})
         use_id_for_ns   = bool(rospy.get_param('~use_id_for_ns', "False"))
 
-        self.local_ros_client  = Ros(rospy.get_param('~local_host','127.0.0.1'), rospy.get_param('~local_port', 9090))
-        self.bridge_ros_client = Ros(rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
+        self.local_ros_client  = Ros(rospy.get_param('~host_from','127.0.0.1'), rospy.get_param('~port_from', 9090))
+        self.bridge_ros_client = Ros(rospy.get_param('~host_to','127.0.0.1'), rospy.get_param('~port_to', 9090))
 
         rospy.loginfo('')
-        rospy.loginfo('Connect Local Host : [%s:%s], Remote Host : [%s:%s]', rospy.get_param('~local_host','127.0.0.1'), rospy.get_param('~local_port', 9090),rospy.get_param('~remote_host','127.0.0.1'), rospy.get_param('~remote_port', 9090))
+        rospy.loginfo('Connect Local Host : [%s:%s], Remote Host : [%s:%s]', rospy.get_param('~host_from','127.0.0.1'), rospy.get_param('~port_from', 9090),rospy.get_param('~host_to','127.0.0.1'), rospy.get_param('~port_to', 9090))
         rospy.loginfo('')
 
         rospy.loginfo('Make below topics bridge')
-        
+
         # set bridge subscriber & publisher
         def set_pub_sub(topicname, datatype):
             pub_topicname = topicname
-            if use_id_for_ns: pub_topicname = '/' + conf['id'] + topicname            
+            if use_id_for_ns: pub_topicname = '/' + conf['id'] + topicname
             rospy.loginfo('Local Sub:[%s] => Bridge Pub:[%s]', topicname, pub_topicname)
 
             self.local_sub[topicname]  = Topic(self.local_ros_client, topicname, datatype)
@@ -57,11 +57,10 @@ class rosbridge_to_rosbridge():
                     if flag:
                         break
                 if not flag:
-                    
                     set_pub_sub(topic_dict['name'], topic_dict['type'])
         else:
             for topic_conf in conf['include_topics']:
-                set_pub_sub(topic_conf['name'].decode(), topic_conf['type'].decode())
+                set_pub_sub(topic_conf['name'], topic_conf['type'])
 
         try:
             self.bridge_ros_client.run_forever()

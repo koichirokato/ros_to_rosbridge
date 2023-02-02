@@ -1,16 +1,14 @@
 <launch>
     <arg name="host_from" default="127.0.0.1" />
     <arg name="port_from" default="9090" />
-    <arg name="host_to" default="127.0.0.1" />
-    <arg name="port_to" default="9090" />
     <arg name="use_id_for_ns" default="false" />
+    <arg name="config_file" default="$(find rosbridge_bridge)/conf/config.yaml" />
 
-    <node name="rosbridge_to_rosbridge" pkg="rosbridge_bridge" type="rosbridge_to_rosbridge.py" output="screen">
+    <node name="rosbridge_to_ros" pkg="rosbridge_bridge" type="rosbridge_to_ros.py" output="screen">
         <param name="host_from" value="$(arg host_from)" />
         <param name="port_from" value="$(arg port_from)" />
-        <param name="host_to" value="$(arg host_to)" />
-        <param name="port_to" value="$(arg port_to)" />
         <param name="use_id_for_ns" value="$(arg use_id_for_ns)" />
+        <param name="config_file" value="$(arg config_file)" />
     </node>
 
 </launch>
